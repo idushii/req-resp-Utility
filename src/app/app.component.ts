@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { MainService } from './main.service';
 import { ServerRequest } from './serverRequest';
 
@@ -14,7 +13,7 @@ export class AppComponent {
   item: ServerRequest
   items: ServerRequest[] = []
 
-  constructor( private Service: MainService, private router: Router ) { }
+  constructor( private Service: MainService ) { }
 
   ngOnInit() {
     this.items = this.Service.setData()

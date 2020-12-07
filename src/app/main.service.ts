@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, interval } from 'rxjs';
-import { catchError, map, tap, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ServerRequest } from './serverRequest';
 
 
@@ -11,14 +11,13 @@ import { ServerRequest } from './serverRequest';
 export class MainService {
 
   requestsURL = 'http://localhost:1111/logs/'
+  //public defaultHeaders = new HttpHeaders();
 
   items = <ServerRequest[]>[]
   newItem: ServerRequest
   editItem: ServerRequest
 
-constructor(
-  private http: HttpClient
-) { }
+constructor( private http: HttpClient ) { }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
@@ -28,11 +27,8 @@ constructor(
     }
   }
 
-  public getAll(): Observable<ServerRequest[]> {
-    return this.http.get<ServerRequest[]>(this.requestsURL)
-                    .pipe(
-                      catchError(this.handleError('getAll', []))
-                      );
+  public getAll(): Observable<any> {
+    return this.http.get(this.requestsURL).pipe(catchError(this.handleError('getAll', [])));
   }
 
   public createData(_data: any) {
