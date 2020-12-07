@@ -18,10 +18,11 @@ export class AppComponent {
 
   ngOnInit() {
     this.items = this.Service.setData()
+    console.log(this.items)
   }
 
   handleClickItem(item: ServerRequest) {
-    this.router.navigate(['#/' + item.id]);
+    //this.router.navigate(['#/' + item.id]);
   }
 
 }

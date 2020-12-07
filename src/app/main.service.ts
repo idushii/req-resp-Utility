@@ -57,6 +57,7 @@ constructor(
       Duration_done: 0,
       Action_done: ''
     }
+    console.log(this.newItem)
     this.items.push(this.newItem)
     return this.items;
   }
@@ -83,6 +84,7 @@ constructor(
       Duration_done: _data.duration,
       Action_done: _data.action
     }
+    console.log(editItem)
     return editItem;
   }
 
@@ -100,6 +102,7 @@ constructor(
         })
       })
     });
+    console.log(this.items)
     return this.items
   }
 }
