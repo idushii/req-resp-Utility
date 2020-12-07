@@ -1,1 +1,10 @@
-<app-request-list></app-request-list>
+<div class="page">
+  <div class="list">
+    <table tbody>
+      <tr *ngFor="let item of items | slice:0:10"><a (click)="handleClickItem(item)">{{item.Action_pending}} {{item.Status_pending}} {{item.Code_pending}} {{item.URL}}</a></tr>
+    </table>
+  </div>
+  <div class="content">
+    <app-request-data [id]="item.id"></app-request-data>
+  </div>
+</div>
