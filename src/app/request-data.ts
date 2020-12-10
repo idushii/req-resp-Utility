@@ -36,16 +36,16 @@ export class RequestData {
       this.Action_pending = data.action
     }
     if(data.status === 'done') {
-    this.id = data.id,
-    this.RequestURL = data.url,
-    this.Code_done = data.code,
-    this.Status_done = data.status,
-    this.Headers_done = data.headers,
-    this.Headers_response_done = data.headers_response,
-    this.Payload_done = data.payload,
-    this.Response_done = data.response,
-    this.Duration_done = data.duration,
-    this.Action_done = data.action
+      this.id = data.id,
+      this.RequestURL = data.url,
+      this.Code_done = data.code,
+      this.Status_done = data.status,
+      this.Headers_done = data.headers,
+      this.Headers_response_done = data.headers_response,
+      this.Payload_done = data.payload,
+      this.Response_done = data.response,
+      this.Duration_done = data.duration,
+      this.Action_done = data.action
     }
   }
 }
