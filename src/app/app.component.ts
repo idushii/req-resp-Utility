@@ -17,6 +17,9 @@ export class AppComponent {
 
   ngOnInit() {
     this.items = this.Service.getData()
+    if(this.items.length > 10) {
+      this.items.slice(this.items.length-10, this.items.length)
+    }
   }
 
   getitem(id: number) {

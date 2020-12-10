@@ -28,7 +28,7 @@ constructor( private http: HttpClient ) { }
 
   public getAll(): Observable<RequestData[]> {
     return this.http.get<ServerRequest[]>(this.requestsURL)
-    .pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
+    //.pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
     .pipe(catchError(this.handleError('getAll', [])));
   }
 
