@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { MainService } from './main.service';
-import { RequestData } from './request-data';
-import {ServerRequest} from "./serverRequest";
+import {Component} from '@angular/core';
+import {MainService} from './main.service';
+import {RequestData} from './request-data';
+import {ResData} from './res_data';
 
 @Component({
   selector: 'app-root',
@@ -11,23 +11,26 @@ import {ServerRequest} from "./serverRequest";
 export class AppComponent {
   title = 'req-resp-Utility';
 
-  item: RequestData
-  items: any[]
+  item: RequestData;
+  items: ResData[];
 
-  constructor( public Service: MainService ) { }
+  constructor(public Service: MainService) {
+  }
 
   async ngOnInit() {
-    this.Service.getAll1().snapshotChanges().subscribe((res) => {
-      this.items = res.map(item  => item.payload.toJSON()) as ServerRequest[];
-
-      console.log([...this.items]);
+    this.Service.getAll1().subscribe(items => {
+      this.Service.items1$.next(items);
     });
   }
 
   get handleClickParams() {
     return {
       id: this.item.id
-    }
+    };
   }
 
+  select(item: ResData) {
+    this.Service.activeItem$.next(item);
+    // Переход на страницу просмотра
+  }
 }

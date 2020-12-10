@@ -1,10 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { RequestData } from './request-data';
-import { ServerRequest } from './serverRequest';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {RequestData} from './request-data';
+import {ServerRequest} from './serverRequest';
 import {AngularFireDatabase, AngularFireList} from "@angular/fire/database";
+import {ResData} from "./res_data";
 
 
 @Injectable({
@@ -21,19 +22,43 @@ export class MainService {
   private newItems: RequestData[]
   private item: RequestData
 
-constructor( private http: HttpClient, private db: AngularFireDatabase ) {
-  this.tutorialsRef = db.list(this.dbPath);
+  items1: ResData[] = [];
+  items1$: BehaviorSubject<ResData[]> = new BehaviorSubject([]);
 
-}
+  activeItem: ResData = null;
+  activeItem$: BehaviorSubject<ResData | null> = new BehaviorSubject(null);
 
-  getAll1(): AngularFireList<ServerRequest> {
-    return this.tutorialsRef;
+  constructor(private http: HttpClient, private db: AngularFireDatabase) {
+    this.tutorialsRef = db.list(this.dbPath);
+
+    this.items1$.subscribe(items => this.items1 = items);
+    this.activeItem$.subscribe(activeitems => this.activeItem = activeitems);
+  }
+
+  getAll1(): Observable<ResData[]> {
+    return this.tutorialsRef.snapshotChanges()
+      .pipe(
+        map((items) => items.map(item => item.payload.toJSON() as ResData)),
+        map((items) => {
+          const res: ResData[] = [];
+
+          [...items].reverse().forEach(item => {
+            const index = res.findIndex((val) => val.id === item.id);
+            if (index === -1) {
+              res.push(item);
+            } else {
+              res[index] = {...items[index], ...item};
+            }
+          });
+
+          return res;
+        }),
+      );
   }
 
   clearAll() {
     this.tutorialsRef.remove();
   }
-
 
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -46,8 +71,8 @@ constructor( private http: HttpClient, private db: AngularFireDatabase ) {
 
   public getAll(): Observable<RequestData[]> {
     return this.http.get<ServerRequest[]>(this.requestsURL)
-    .pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
-    .pipe(catchError(this.handleError('getAll', [])));
+      .pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
+      .pipe(catchError(this.handleError('getAll', [])));
   }
 
   getData() {
@@ -58,7 +83,7 @@ constructor( private http: HttpClient, private db: AngularFireDatabase ) {
     this.newItems.forEach(newItem => {
       console.log(newItem)
       this.items.forEach(item => {
-        if(newItem.id == item.id) {
+        if (newItem.id == item.id) {
           this.item = this.getByID(item.id)
           this.updateData(this.item, newItem)
         } else {
