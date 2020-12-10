@@ -19,10 +19,7 @@ export class AppComponent {
     this.items = this.Service.getData()
   }
 
-  get handleClickParams() {
-    return {
-      id: this.item.id
-    }
+  getitem(id: number) {
+    return { id: id }
   }
-
 }

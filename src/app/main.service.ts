@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { RequestData } from './request-data';
 import { ServerRequest } from './serverRequest';
 
@@ -15,7 +15,6 @@ export class MainService {
 
   private items: RequestData[]
   private newItems: RequestData[]
-  private item: RequestData
 
 constructor( private http: HttpClient ) { }
 
@@ -42,8 +41,7 @@ constructor( private http: HttpClient ) { }
       console.log(newItem)
       this.items.forEach(item => {
         if(newItem.id == item.id) {
-          this.item = this.getByID(item.id)
-          this.updateData(this.item, newItem)
+          this.updateData(this.getByID(item.id), newItem)
         } else {
           this.items.push(new RequestData(newItem))
         }
@@ -54,8 +52,7 @@ constructor( private http: HttpClient ) { }
   }
 
   getByID(id: number) {
-    this.item = this.items.find(item => item.id === id);
-    return this.item;
+    return this.items.find(item => item.id === id);
   }
 
   updateData(editItem: RequestData, _data: any) {
