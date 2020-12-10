@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { RequestData } from './request-data';
 import { ServerRequest } from './serverRequest';
 
@@ -14,7 +14,7 @@ export class MainService {
   requestsURL = 'http://localhost:1111/logs/'
 
   private items: RequestData[]
-  private newItems: RequestData[]
+  private newItems: ServerRequest[]
 
 constructor( private http: HttpClient ) { }
 
@@ -26,7 +26,7 @@ constructor( private http: HttpClient ) { }
     }
   }
 
-  public getAll(): Observable<RequestData[]> {
+  public getAll(): Observable<ServerRequest[]> {
     return this.http.get<ServerRequest[]>(this.requestsURL)
     //.pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
     .pipe(catchError(this.handleError('getAll', [])));
@@ -55,7 +55,25 @@ constructor( private http: HttpClient ) { }
     return this.items.find(item => item.id === id);
   }
 
-  updateData(editItem: RequestData, _data: any) {
+  createData( _data: ServerRequest) {
+    const newItem = {
+      id: _data.id,
+      RequestURL: _data.url,
+      Code_pending:  _data.code,
+      Status_pending: _data.status,
+      Method_pending: _data.method,
+      Headers_pending: _data.headers,
+      Headers_response_pending: _data.headers_response,
+      Payload_pending: _data.payload,
+      Response_pending: _data.response,
+      Duration_pending: _data.duration,
+      Action_pending: _data.action,
+    }
+    console.log(newItem)
+    return newItem;
+  }
+
+  updateData(editItem: RequestData, _data: ServerRequest) {
     editItem = {
       id: editItem.id,
       RequestURL: editItem.RequestURL,
@@ -78,6 +96,5 @@ constructor( private http: HttpClient ) { }
       Action_done: _data.action
     }
     console.log(editItem)
-    //return editItem;
   }
 }
