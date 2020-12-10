@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
+import { NgArrayPipesModule } from 'ngx-pipes';
 
 @NgModule({
   declarations: [
@@ -21,8 +22,8 @@ import {AngularFireDatabaseModule} from '@angular/fire/database';
     HttpClientModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
-    ,
+    AngularFireDatabaseModule,
+    NgArrayPipesModule,
   ],
   providers: [MainService],
   bootstrap: [AppComponent]

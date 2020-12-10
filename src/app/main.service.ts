@@ -23,7 +23,6 @@ export class MainService {
 
 constructor( private http: HttpClient, private db: AngularFireDatabase ) {
   this.tutorialsRef = db.list(this.dbPath);
-
 }
 
   getAll1(): AngularFireList<ServerRequest> {
