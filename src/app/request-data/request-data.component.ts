@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { MainService } from '../main.service';
-import { ServerRequest } from '../serverRequest';
+import { RequestData } from '../request-data';
 
 @Component({
   selector: 'app-request-data',
@@ -12,19 +11,14 @@ export class RequestDataComponent implements OnInit {
 
   @Input() id: number;
 
-  item: ServerRequest
-  items: ServerRequest[] = []
+  item: RequestData
 
   constructor( private Service: MainService ) { }
 
   ngOnInit() {
-    this.items = this.Service.setData()
+    if(this.id) {
+      this.item = this.Service.getByID(this.id);
+    }
   }
-
-  getItem(id: number): Observable<ServerRequest> {
-    return of(this.items.find(item => item.id === id));
-  }
-
-
 }
 

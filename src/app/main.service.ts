@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { RequestData } from './request-data';
 import { ServerRequest } from './serverRequest';
 
 
@@ -11,11 +12,10 @@ import { ServerRequest } from './serverRequest';
 export class MainService {
 
   requestsURL = 'http://localhost:1111/logs/'
-  //public defaultHeaders = new HttpHeaders();
 
-  items = <ServerRequest[]>[]
-  newItem: ServerRequest
-  editItem: ServerRequest
+  private items: RequestData[]
+  private newItems: RequestData[]
+  private item: RequestData
 
 constructor( private http: HttpClient ) { }
 
@@ -27,41 +27,41 @@ constructor( private http: HttpClient ) { }
     }
   }
 
-  public getAll(): Observable<any> {
-    return this.http.get(this.requestsURL).pipe(catchError(this.handleError('getAll', [])));
+  public getAll(): Observable<RequestData[]> {
+    return this.http.get<ServerRequest[]>(this.requestsURL)
+    .pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
+    .pipe(catchError(this.handleError('getAll', [])));
   }
 
-  public createData(_data: any) {
-    this.newItem = {
-      id: undefined,
-      URL: _data.url,
-      Code_pending: _data.code,
-      Status_pending: _data.status,
-      Method_pending: _data.method,
-      Headers_pending: _data.headers,
-      Headers_response_pending: _data.headers_response,
-      Payload_pending: _data.payload,
-      Response_pending: _data.response,
-      Duration_pending: _data.duration,
-      Action_pending: _data.action,
-      Code_done: 0,
-      Status_done: '',
-      Headers_done: {'': ''},
-      Headers_response_done: {'': ''},
-      Payload_done: [],
-      Response_done: [],
-      Duration_done: 0,
-      Action_done: ''
-    }
-    console.log(this.newItem)
-    this.items.push(this.newItem)
-    return this.items;
+  getData() {
+    this.getAll().subscribe(items => {
+      this.newItems = items
+      console.log(this.newItems)
+    })
+    this.newItems.forEach(newItem => {
+      console.log(newItem)
+      this.items.forEach(item => {
+        if(newItem.id == item.id) {
+          this.item = this.getByID(item.id)
+          this.updateData(this.item, newItem)
+        } else {
+          this.items.push(new RequestData(newItem))
+        }
+      })
+      console.log(this.items)
+    });
+    return this.items
   }
 
-  public updateData(editItem: ServerRequest, _data: any) {
+  getByID(id: number) {
+    this.item = this.items.find(item => item.id === id);
+    return this.item;
+  }
+
+  updateData(editItem: RequestData, _data: any) {
     editItem = {
       id: editItem.id,
-      URL: editItem.URL,
+      RequestURL: editItem.RequestURL,
       Code_pending: editItem.Code_pending,
       Status_pending: editItem.Status_pending,
       Method_pending: editItem.Method_pending,
@@ -81,24 +81,6 @@ constructor( private http: HttpClient ) { }
       Action_done: _data.action
     }
     console.log(editItem)
-    return editItem;
-  }
-
-  public setData() {
-    this.getAll().subscribe(resp => {
-      resp.forEach(respItem => {
-        console.log(respItem)
-        this.items.forEach(i => {
-          if(i.id != respItem.id) {
-            this.createData(respItem)
-          }
-          if(i.id == respItem.id) {
-            this.updateData(i, respItem)
-          }
-        })
-      })
-    });
-    console.log(this.items)
-    return this.items
+    //return editItem;
   }
 }

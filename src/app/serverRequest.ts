@@ -1,6 +1,6 @@
 export interface ServerRequest {
     id: number,
-    URL: string,
+    RequestURL: string,
     Code_pending: number,
     Status_pending: string,
     Method_pending: string,

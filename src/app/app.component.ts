@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MainService } from './main.service';
-import { ServerRequest } from './serverRequest';
+import { RequestData } from './request-data';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +10,19 @@ import { ServerRequest } from './serverRequest';
 export class AppComponent {
   title = 'req-resp-Utility';
 
-  item: ServerRequest
-  items: ServerRequest[] = []
+  item: RequestData
+  items: RequestData[]
 
   constructor( private Service: MainService ) { }
 
   ngOnInit() {
-    this.items = this.Service.setData()
-    console.log(this.items)
+    this.items = this.Service.getData()
   }
 
-  handleClickItem(item: ServerRequest) {
-    //this.router.navigate(['#/' + item.id]);
+  get handleClickParams() {
+    return {
+      id: this.item.id
+    }
   }
 
 }
