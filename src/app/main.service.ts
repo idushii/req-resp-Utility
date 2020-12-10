@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { RequestData } from './request-data';
 import { ServerRequest } from './serverRequest';
+import {AngularFireDatabase, AngularFireList} from "@angular/fire/database";
 
 
 @Injectable({
@@ -11,13 +12,29 @@ import { ServerRequest } from './serverRequest';
 })
 export class MainService {
 
+  private dbPath = '/lists1';
+  tutorialsRef: AngularFireList<RequestData> = null;
+
   requestsURL = 'http://localhost:1111/logs/'
 
   private items: RequestData[]
   private newItems: RequestData[]
   private item: RequestData
 
-constructor( private http: HttpClient ) { }
+constructor( private http: HttpClient, private db: AngularFireDatabase ) {
+  this.tutorialsRef = db.list(this.dbPath);
+
+}
+
+  getAll1(): AngularFireList<ServerRequest> {
+    return this.tutorialsRef;
+  }
+
+  clearAll() {
+    this.tutorialsRef.remove();
+  }
+
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

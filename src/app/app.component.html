@@ -1,10 +1,19 @@
+<button (click)="Service.clearAll()">ClearAll</button>
+
+<table>
+  <tr *ngFor="let item of items">
+    <td>{{item.url}}</td>
+    <td>{{item.payload}}</td>
+  </tr>
+</table>
+
 <div class="page">
   <div class="list">
     <table tbody>
-      <tr *ngFor="let item of items | slice:0:10"><a [id]="item.id">{{item.Action_pending}} {{item.Status_pending}} {{item.Code_pending}} {{item.RequestURL}}</a></tr>
+<!--      <tr *ngFor="let item of items | slice:0:10"><a [id]="item.id">{{item.Action_pending}} {{item.Status_pending}} {{item.Code_pending}} {{item.RequestURL}}</a></tr>-->
     </table>
   </div>
   <div class="content">
-    <app-request-data></app-request-data>
+<!--    <app-request-data></app-request-data>-->
   </div>
 </div>

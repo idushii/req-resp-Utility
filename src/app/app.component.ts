@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MainService } from './main.service';
 import { RequestData } from './request-data';
+import {ServerRequest} from "./serverRequest";
 
 @Component({
   selector: 'app-root',
@@ -11,12 +12,16 @@ export class AppComponent {
   title = 'req-resp-Utility';
 
   item: RequestData
-  items: RequestData[]
+  items: any[]
 
-  constructor( private Service: MainService ) { }
+  constructor( public Service: MainService ) { }
 
-  ngOnInit() {
-    this.items = this.Service.getData()
+  async ngOnInit() {
+    this.Service.getAll1().snapshotChanges().subscribe((res) => {
+      this.items = res.map(item  => item.payload.toJSON()) as ServerRequest[];
+
+      console.log([...this.items]);
+    });
   }
 
   get handleClickParams() {
