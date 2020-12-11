@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import { Router } from '@angular/router';
 import {MainService} from './main.service';
 import {RequestData} from './request-data';
 import {ResData} from './res_data';
@@ -14,7 +15,7 @@ export class AppComponent {
   item: RequestData;
   items: ResData[];
 
-  constructor(public Service: MainService) {
+  constructor(public Service: MainService, private router: Router,) {
   }
 
   async ngOnInit() {
@@ -23,14 +24,9 @@ export class AppComponent {
     });
   }
 
-  get handleClickParams() {
-    return {
-      id: this.item.id
-    };
-  }
-
   select(item: ResData) {
     this.Service.activeItem$.next(item);
     // Переход на страницу просмотра
+    this.router.navigate(['request/' + item.id]);
   }
 }

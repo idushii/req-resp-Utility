@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MainService } from '../main.service';
-import { RequestData } from '../request-data';
+import { ResData } from '../res_data';
 
 @Component({
   selector: 'app-request-data',
@@ -9,16 +10,17 @@ import { RequestData } from '../request-data';
 })
 export class RequestDataComponent implements OnInit {
 
-  @Input() id: number;
+  id: number
+  item: ResData
 
-  item: RequestData
-
-  constructor( private Service: MainService ) { }
+  constructor( private Service: MainService, private route: ActivatedRoute ) { }
 
   ngOnInit() {
-    if(this.id) {
-      this.item = this.Service.getByID(this.id);
-    }
+    this.route.params
+        .subscribe(params => {
+        this.id =  Number(params.id);
+        });
+      this.Service.getByID(this.id);
   }
 }
 
