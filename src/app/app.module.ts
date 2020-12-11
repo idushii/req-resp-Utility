@@ -10,6 +10,7 @@ import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import { NgArrayPipesModule } from 'ngx-pipes';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NgArrayPipesModule } from 'ngx-pipes';
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     RouterModule,
     HttpClientModule,
     BrowserAnimationsModule,
