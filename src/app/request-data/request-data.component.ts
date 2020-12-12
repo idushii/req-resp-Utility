@@ -16,11 +16,12 @@ export class RequestDataComponent implements OnInit {
   constructor( private Service: MainService, private route: ActivatedRoute ) { }
 
   ngOnInit() {
-    this.route.params
-        .subscribe(params => {
-        this.id =  Number(params.id);
-        });
-      this.Service.getByID(this.id);
+    //this.route.params
+    //    .subscribe(params => {
+     //   this.id =  Number(params.id);
+    //   });
+    this.item = this.Service.getItem();
+    console.log(this.item)
   }
 }
 

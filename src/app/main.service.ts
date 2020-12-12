@@ -52,8 +52,8 @@ export class MainService {
     this.tutorialsRef.remove();
   }
 
-  getByID(id: number) {
-    this.activeItem = this.items1.find(item => item.id === id);
+  getItem() {
+    //this.activeItem = this.items1.find(item => item.id === id);
     return this.activeItem;
   }
 }

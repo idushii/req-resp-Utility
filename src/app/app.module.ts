@@ -9,13 +9,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
-import { AppRoutingModule } from './app-routing.module';
+import {AppRoutingModule} from './app-routing.module';
+import {RequestListComponent} from './request-list/request-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RequestDataComponent
-  ],
+    RequestDataComponent,
+    RequestListComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

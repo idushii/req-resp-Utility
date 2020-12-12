@@ -1,0 +1,10 @@
+<button (click)="Service.clearAll()">ClearAll</button>
+<div class="list">
+  <table>
+    <tr *ngFor="let item of (Service.items1$ | async)" (click)="select(item)">
+      <td>{{item.url}}</td>
+      <td>{{item.duration}}</td>
+      <td>{{item.status}}</td>
+    </tr>
+  </table>
+</div>
