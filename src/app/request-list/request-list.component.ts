@@ -17,15 +17,12 @@ export class RequestListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.Service.getAll1().subscribe(items => {
-      this.Service.items1$.next(items);
-    });
   }
 
   select(item: ResData) {
     this.Service.activeItem$.next(item);
     // Переход на страницу просмотра
-    this.router.navigate(['request/']);
+    this.router.navigate([`request/${item.id}`]);
   }
 
 }
