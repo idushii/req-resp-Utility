@@ -11,12 +11,14 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AppRoutingModule} from './app-routing.module';
 import {RequestListComponent} from './request-list/request-list.component';
+import { RequestHeadersComponent } from './request-headers/request-headers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RequestDataComponent,
-    RequestListComponent
+    RequestListComponent,
+    RequestHeadersComponent
    ],
   imports: [
     BrowserModule,

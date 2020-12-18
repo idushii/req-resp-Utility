@@ -3,8 +3,8 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {RequestData} from './request-data';
-import {AngularFireDatabase, AngularFireList} from "@angular/fire/database";
-import {ResData} from "./res_data";
+import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import {ResData} from './res_data';
 
 
 @Injectable({
