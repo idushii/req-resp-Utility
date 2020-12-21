@@ -3,6 +3,7 @@ export interface ResData {
   id: number;
   action: string;
   duration: number;
+  params: string;
   payload: string;
   url: string;
   headers_response: {[x: string]: string};
