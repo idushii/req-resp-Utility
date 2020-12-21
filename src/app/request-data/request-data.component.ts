@@ -17,13 +17,21 @@ export class RequestDataComponent implements OnInit {
   constructor(private Service: MainService, private route: ActivatedRoute) {
   }
 
+  get itemPayload() {
+    try {
+      return JSON.parse(this.item.payload);
+    } catch (e) {
+      return this.item?.payload;
+    }
+  }
+
   ngOnInit() {
     combineLatest([
       this.route.params,
       this.Service.items1$
     ])
       .subscribe(([params, items]) => {
-        this.id = Number(params.id);
+        this.id = params.id;
         this.item = items.find(item => item.id === this.id);
         console.log(this.item);
       });

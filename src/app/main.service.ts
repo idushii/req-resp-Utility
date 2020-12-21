@@ -33,17 +33,14 @@ export class MainService {
       .pipe(
         map((items) => items.map(item => item.payload.toJSON() as ResData)),
         map((items) => {
-          const res: ResData[] = [];
+          const res: { [x: number]: ResData } = {};
 
           [...items].reverse().forEach(item => {
-            const index = res.findIndex((val) => val.id === item.id);
-            if (index === -1) {
-              res.push(item);
-            } else {
-              res[index] = {...items[index], ...item};
+            if (res[item.id] === undefined || item.status !== 'pending') {
+              res[item.id] = item;
             }
           });
-          return res;
+          return Object.values(res);
         }),
       );
   }

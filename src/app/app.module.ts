@@ -12,13 +12,15 @@ import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AppRoutingModule} from './app-routing.module';
 import {RequestListComponent} from './request-list/request-list.component';
 import { RequestHeadersComponent } from './request-headers/request-headers.component';
+import { PrettyPrintPipe } from './pretty-print.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     RequestDataComponent,
     RequestListComponent,
-    RequestHeadersComponent
+    RequestHeadersComponent,
+    PrettyPrintPipe
    ],
   imports: [
     BrowserModule,
