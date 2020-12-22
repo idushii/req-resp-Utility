@@ -40,6 +40,13 @@ export class MainService {
               res[item.id] = item;
             }
           });
+
+          for (const key in res) {
+            const item = res[key];
+            res[key].duration = (((new Date(item.responseAt)).getTime() - (new Date(item.createdAt)).getTime()) / 1000).toFixed(1);
+            if (isNaN(res[key].duration)) res[key].duration = null;
+          }
+
           return Object.values(res);
         }),
       );

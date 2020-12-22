@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'prettyPrint'
@@ -6,9 +6,17 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PrettyPrintPipe implements PipeTransform {
 
   transform(value: unknown, ...args: unknown[]): string {
-    return JSON.stringify(value, null, 2)
-      // .replace(' ', '&nbsp;')
-      // .replace('\n', '<br/>');
+    let value1 = value;
+    if (typeof value === 'string') {
+      try {
+        value1 = JSON.parse(value);
+      } catch (e) {
+        // EMPTY
+      }
+    }
+    return JSON.stringify(value1, null, 2);
+    // .replace(' ', '&nbsp;')
+    // .replace('\n', '<br/>');
   }
 
 }

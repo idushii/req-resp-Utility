@@ -1,11 +1,13 @@
 <div class="content" *ngIf="item">
 
-  <h6>URL: <span>{{item.url}}</span></h6>
+  <h6>[{{item.method}}] URL: <span>{{item.url}}</span></h6>
   <p></p>
   <h6>Request headers</h6>
   <p> <app-request-headers [headers]="item.headers"></app-request-headers> </p>
   <h6>Response headers</h6>
   <p><app-request-headers [headers]="item.headers_response"></app-request-headers></p>
+  <h6>Params</h6>
+  <pre [innerText]="item.params | prettyPrint"></pre>
   <h6>Payload</h6>
   <pre [innerText]="itemPayload | prettyPrint"></pre>
 
