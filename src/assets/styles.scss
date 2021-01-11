@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 1rem;
   padding: 0;
   color: rgb(34, 34, 34);
   font-family: 'Oxygen', sans-serif;
@@ -24,4 +24,21 @@ a {
   padding: 1rem 2rem;
   background-color: white;
   border-radius: 10px;
+}
+
+table.list {
+  width: 100%;
+  td, th {
+    border: 1px dashed black;
+    padding: 0.2rem 1rem;
+  }
+}
+
+table.info {
+  text-align: left;
+
+  td, th {
+    border: 1px dashed black;
+    padding: 0.2rem 1rem;
+  }
 }

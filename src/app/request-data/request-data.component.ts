@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MainService} from '../main.service';
 import {ResData} from '../res_data';
-import {combineLatest} from "rxjs";
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-request-data',
@@ -14,10 +14,10 @@ export class RequestDataComponent implements OnInit {
   id: number;
   item: ResData;
 
-  constructor(private Service: MainService, private route: ActivatedRoute) {
+  constructor(private mainService: MainService, private route: ActivatedRoute) {
   }
 
-  get itemPayload() {
+  get itemPayload(): any {
     try {
       return JSON.parse(this.item.payload);
     } catch (e) {
@@ -25,10 +25,16 @@ export class RequestDataComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      if (params.device) {
+        this.mainService.selectDevice(params.device);
+      }
+    });
+
     combineLatest([
       this.route.params,
-      this.Service.items1$
+      this.mainService.items1$
     ])
       .subscribe(([params, items]) => {
         this.id = params.id;

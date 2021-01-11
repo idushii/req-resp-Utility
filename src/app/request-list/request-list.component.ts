@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MainService } from '../main.service';
-import { ResData } from '../res_data';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MainService} from '../main.service';
+import {ResData} from '../res_data';
 
 @Component({
   selector: 'app-request-list',
@@ -10,19 +10,25 @@ import { ResData } from '../res_data';
 })
 export class RequestListComponent implements OnInit {
 
-  item: ResData;
   items: ResData[];
+  deviceUUID: string;
 
-  constructor(public Service: MainService, private router: Router ) {
+  constructor(public mainService: MainService, private router: Router, private route: ActivatedRoute) {
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    this.route.params.subscribe((params) => {
+      this.deviceUUID = params.device;
+      if (params.device) {
+        this.mainService.selectDevice(params.device);
+      }
+    });
   }
 
-  select(item: ResData) {
-    this.Service.activeItem$.next(item);
+  select(item: ResData): void {
+    this.mainService.activeItem$.next(item);
     // Переход на страницу просмотра
-    this.router.navigate([`request/${item.id}`]);
+    this.router.navigate([`device/${this.deviceUUID}/request/${item.id}`]);
   }
 
 }

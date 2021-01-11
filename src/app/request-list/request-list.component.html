@@ -1,17 +1,24 @@
-<button (click)="Service.clearAll()">ClearAll</button>
-<div class="list">
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>method / url</th>
-      <th>duration</th>
-      <th>status</th>
-    </tr>
-    <tr *ngFor="let item of (Service.items1$ | async)" (click)="select(item)">
-      <td>{{item.id}}</td>
-      <td>{{item.method}} {{item.url}}</td>
-      <td>{{item.duration}}</td>
-      <td>{{item.status}}</td>
-    </tr>
-  </table>
-</div>
+<table class="info">
+  <tr *ngFor="let prop of mainService.activeDevice$ | async | keys">
+    <th>{{prop.key}}</th>
+    <td>{{prop.value}}</td>
+  </tr>
+</table>
+<br>
+<button (click)="mainService.clearAll()">ClearAll</button>
+<br>
+<br>
+<table class="list">
+  <tr>
+    <th>ID</th>
+    <th>method / url</th>
+    <th>duration</th>
+    <th>status</th>
+  </tr>
+  <tr *ngFor="let item of (mainService.items1$ | async)" (click)="select(item)">
+    <td>{{item.id}}</td>
+    <td>{{item.method}} {{item.url}}</td>
+    <td>{{item.duration}}</td>
+    <td>{{item.status}}</td>
+  </tr>
+</table>

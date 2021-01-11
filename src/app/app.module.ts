@@ -13,6 +13,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {RequestListComponent} from './request-list/request-list.component';
 import { RequestHeadersComponent } from './request-headers/request-headers.component';
 import { PrettyPrintPipe } from './pretty-print.pipe';
+import { DevicesComponent } from './devices/devices.component';
+import {KeysPipe} from './keys.pipe';
 
 @NgModule({
   declarations: [
@@ -20,8 +22,11 @@ import { PrettyPrintPipe } from './pretty-print.pipe';
     RequestDataComponent,
     RequestListComponent,
     RequestHeadersComponent,
-    PrettyPrintPipe
-   ],
+    PrettyPrintPipe,
+    DevicesComponent,
+    KeysPipe,
+    KeysPipe
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
