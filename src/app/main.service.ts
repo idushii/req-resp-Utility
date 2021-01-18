@@ -12,12 +12,20 @@ import {DeviceInfo, ILogger, ResData} from './res_data';
 export class MainService {
 
   private dbLoggerDeviceInfoLink = '/logger/info';
-  private dbLoggerLink = '/logger/log/';
+  private dbLoggerSessionsLink = '/logger/sessions';
+  private dbSessionsLink = '/logger/log/';
   loggerDeviceInfoRef: AngularFireList<ILogger> = null;
-  loggerLogRef: AngularFireList<ILogger> = null;
+  sessionsRef: AngularFireList<{ [x: number]: number }> = null;
+  requestsRef: AngularFireList<ILogger> = null;
 
   items1: ResData[] = [];
   items1$: BehaviorSubject<ResData[]> = new BehaviorSubject([]);
+
+  sessions: number[] = null;
+  sessions$: BehaviorSubject<number[]> = new BehaviorSubject([]);
+
+  activeSession: number = null;
+  activeSession$: BehaviorSubject<number | null> = new BehaviorSubject(null);
 
   activeItem: ResData = null;
   activeItem$: BehaviorSubject<ResData | null> = new BehaviorSubject(null);
@@ -25,6 +33,7 @@ export class MainService {
   constructor(private http: HttpClient, private db: AngularFireDatabase) {
     this.loggerDeviceInfoRef = db.list(this.dbLoggerDeviceInfoLink);
 
+    this.sessions$.subscribe(items => this.sessions = items);
     this.items1$.subscribe(items => this.items1 = items);
     this.activeItem$.subscribe(activeitems => this.activeItem = activeitems);
   }
@@ -41,14 +50,40 @@ export class MainService {
     });
   }
 
-  selectDevice(uuid: string): void {
+  selectSessions(uuid: string): void {
     this.devices$.subscribe(items => {
       this.activeDevice$.next(items.find(item => item.identifier === uuid));
     });
 
-    this.dbLoggerLink = `/logger/log/${uuid}/log/`;
-    this.loggerLogRef = this.db.list(this.dbLoggerLink);
-    this.loggerLogRef.snapshotChanges()
+    this.dbSessionsLink = `/logger/sessions/${uuid}/`;
+    this.sessionsRef = this.db.list(this.dbSessionsLink);
+    this.sessionsRef.snapshotChanges()
+      .pipe(
+        map((items) => items.map((item) => item.payload.toJSON())),
+      )
+      .subscribe((items: number[]) => {
+        this.sessions$.next(items);
+      });
+  }
+
+  selectActiveSession(uuid: string, sessionId: number): void {
+    this.activeSession = sessionId;
+    this.selectDevice(uuid, sessionId);
+  }
+
+  selectDevice(uuid: string, sessionId?: number): void {
+    this.devices$.subscribe(items => {
+      this.activeDevice$.next(items.find(item => item.identifier === uuid));
+    });
+
+    if (sessionId) {
+      this.dbSessionsLink = `/logger/log/${uuid}/session/${sessionId}/log`;
+      this.activeSession = sessionId;
+    } else {
+      this.dbSessionsLink = `/logger/log/${uuid}/log/`;
+    }
+    this.requestsRef = this.db.list(this.dbSessionsLink);
+    this.requestsRef.snapshotChanges()
       .pipe(
         map((items) => items.map((item) => item.payload.toJSON())),
         map((items: ResData[]) => {
@@ -80,7 +115,8 @@ export class MainService {
   }
 
   async clearAll(): Promise<void> {
-    await this.loggerLogRef.remove();
+    await this.sessionsRef.remove(`${this.activeSession}`);
+    await this.requestsRef.remove();
   }
 
   getItem(id: number): ResData {

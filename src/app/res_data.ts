@@ -4,6 +4,7 @@ export interface ILogger {
 }
 
 export interface DeviceInfo {
+  activeSession: number;
   deviceName: string;
   deviceVersion: string;
   identifier: string;

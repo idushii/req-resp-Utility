@@ -1,7 +1,24 @@
-<table class="info">
-  <tr *ngFor="let prop of mainService.activeDevice$ | async | keys">
-    <th>{{prop.key}}</th>
-    <td>{{prop.value}}</td>
+<table>
+  <tr>
+    <td>
+      <table class="info">
+        <tr *ngFor="let prop of mainService.activeDevice$ | async | keys">
+          <th>{{prop.key}}</th>
+          <td>{{prop.value}}</td>
+        </tr>
+      </table>
+    </td>
+    <td style="vertical-align: top">
+      <div style="padding: 1rem 0;">All Sessions</div>
+      <div>
+        <span
+          class="tag"
+          *ngFor="let prop of mainService.sessions$ | async | keys"
+          (click)="goTo(prop.value)"
+        > {{prop.value}} </span>
+      </div>
+
+    </td>
   </tr>
 </table>
 <br>

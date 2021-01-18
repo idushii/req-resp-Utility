@@ -1,0 +1,13 @@
+<table class="info">
+  <tr *ngFor="let prop of mainService.activeDevice$ | async | keys">
+    <th>{{prop.key}}</th>
+    <td>{{prop.value}}</td>
+  </tr>
+</table>
+<br><br>
+<table class="list">
+  <tr> <th>SessionId</th> </tr>
+  <tr *ngFor="let prop of mainService.sessions$ | async | keys" (click)="goTo(prop.value);">
+    <td>{{prop.value}}</td>
+  </tr>
+</table>

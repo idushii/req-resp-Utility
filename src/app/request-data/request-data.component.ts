@@ -13,6 +13,8 @@ export class RequestDataComponent implements OnInit {
 
   id: number;
   item: ResData;
+  deviceUUID: string;
+  sessionId: number;
 
   constructor(private mainService: MainService, private route: ActivatedRoute) {
   }
@@ -27,8 +29,11 @@ export class RequestDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
+      this.deviceUUID = params.device;
+      this.sessionId = params.sessionId;
+
       if (params.device) {
-        this.mainService.selectDevice(params.device);
+        this.mainService.selectDevice(this.deviceUUID, this.sessionId);
       }
     });
 

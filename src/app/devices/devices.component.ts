@@ -17,6 +17,6 @@ export class DevicesComponent implements OnInit {
   }
 
   goTo(item: DeviceInfo): void {
-    this.router.navigate([`/device/${item.identifier}`]);
+    this.router.navigate([`/device/${item.identifier}/session`]);
   }
 }

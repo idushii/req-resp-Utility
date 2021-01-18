@@ -15,6 +15,7 @@ import { RequestHeadersComponent } from './request-headers/request-headers.compo
 import { PrettyPrintPipe } from './pretty-print.pipe';
 import { DevicesComponent } from './devices/devices.component';
 import {KeysPipe} from './keys.pipe';
+import { SessionsComponent } from './sessions/sessions.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {KeysPipe} from './keys.pipe';
     PrettyPrintPipe,
     DevicesComponent,
     KeysPipe,
-    KeysPipe
+    KeysPipe,
+    SessionsComponent
   ],
   imports: [
     BrowserModule,
