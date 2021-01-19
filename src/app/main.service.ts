@@ -115,7 +115,7 @@ export class MainService {
   }
 
   async clearAll(): Promise<void> {
-    await this.sessionsRef.remove(`${this.activeSession}`);
+    // await this.sessionsRef.remove(`${this.activeSession}`);
     await this.requestsRef.remove();
   }
 

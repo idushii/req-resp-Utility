@@ -29,10 +29,13 @@ export class RequestListComponent implements OnInit {
     });
 
     this.mainService.activeDevice$.subscribe((device) => {
-      if (device?.activeSession && device.activeSession !== this.sessionId) {
-        // this.mainService.selectDevice(this.deviceUUID, device.activeSession);
-        this.goTo(device.activeSession);
-        this.sessionId = device.activeSession;
+      if (device?.activeSession) {
+        if (this.device?.activeSession && device?.activeSession !== this.device?.activeSession) {
+          // this.mainService.selectDevice(this.deviceUUID, device.activeSession);
+          this.goTo(device.activeSession);
+          this.sessionId = device.activeSession;
+        }
+        this.device = device;
       }
     });
   }
