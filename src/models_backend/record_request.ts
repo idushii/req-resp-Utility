@@ -30,6 +30,7 @@ interface RecordBlocAction {
 interface RecordBlocCommit {
   id: number;
   id_bloc: number; // -> RecordBloc.id
+  id_bloc_action: number; // -> RecordBlocAction.id
   name: string;
   payload: string; // json
 }
