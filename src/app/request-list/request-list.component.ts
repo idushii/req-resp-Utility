@@ -15,10 +15,21 @@ export class RequestListComponent implements OnInit {
   sessionId: number;
   device: DeviceInfo;
 
+  navigateToActiveSession = true;
+
   constructor(public mainService: MainService, private router: Router, private route: ActivatedRoute) {
   }
 
+  changeNavigateToActiveSession(): void {
+    this.navigateToActiveSession = !this.navigateToActiveSession;
+    localStorage.navigateToActiveSession = this.navigateToActiveSession ? '1' : '0';
+  }
+
   async ngOnInit(): Promise<void> {
+    if (localStorage.navigateToActiveSession !== undefined) {
+      this.navigateToActiveSession = localStorage.navigateToActiveSession === '1';
+    }
+
     this.route.params.subscribe((params) => {
       this.deviceUUID = params.device;
       this.sessionId = Number(params.sessionId ?? '0');
@@ -29,6 +40,7 @@ export class RequestListComponent implements OnInit {
     });
 
     this.mainService.activeDevice$.subscribe((device) => {
+      if (!this.navigateToActiveSession) return;
       if (device?.activeSession) {
         if (this.device?.activeSession && device?.activeSession !== this.device?.activeSession) {
           // this.mainService.selectDevice(this.deviceUUID, device.activeSession);
