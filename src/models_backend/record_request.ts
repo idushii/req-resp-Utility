@@ -64,7 +64,7 @@ interface User {
 interface UserFavoriteDevice {
   id: number;
   device_id: number; // DeviceRecord.id
-  created_at: number;
+  created_at: Date;
 }
 
 /**
