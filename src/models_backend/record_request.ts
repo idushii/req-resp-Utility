@@ -1,9 +1,9 @@
 interface RecordRequest {
   id: number;
   session_id: number; // SessionRecord.id
+  bloc_action_id: number; // RecordBlocAction.id || null
   status: string; // enum pending / error / done
   status_code: number;
-  bloc_action_id: number; // RecordBlocAction.id || null
   method: string; // enum POST / GET / DELETE / PUT
   duration: number;
   params: string; // json
