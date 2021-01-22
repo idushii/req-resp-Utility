@@ -27,7 +27,7 @@ interface RecordBlocAction {
   payload: string; // json
 }
 
-interface RecordBlocCommit {
+interface RecordBlocEvent {
   id: number;
   id_bloc: number; // -> RecordBloc.id
   id_bloc_action: number; // -> RecordBlocAction.id
