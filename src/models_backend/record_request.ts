@@ -27,6 +27,13 @@ interface RecordBlocAction {
   payload: string; // json
 }
 
+interface RecordBlocCommit {
+  id: number;
+  id_bloc: number; // -> RecordBloc.id
+  name: string;
+  payload: string; // json
+}
+
 interface SessionRecord {
   id: number;
   device_id: number; // DeviceRecord.id
