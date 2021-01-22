@@ -71,7 +71,7 @@ interface UserFavoriteDevice {
  * Methods:
  * getMe -> User, favoritesDevices
  * getLastRequests(idRequest) -> RecordRequest[]
- * getRequests( idsSession, idsDevice, idsBloc, idsBlocAction, idsBlocCommit ) -> RecordRequest[]
+ * getRequests( idsSession, idsDevice, idsBloc, idsBlocAction, idsBlocEvent ) -> RecordRequest[]
  * addRequest(RecordRequest)
  * login(login, password)
  * logout(token)
