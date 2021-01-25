@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {RequestDataComponent} from './request-data/request-data.component';
 import {MainService} from './main.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {environmentDev} from '../environments/environment';
+import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AppRoutingModule} from './app-routing.module';
@@ -35,7 +35,7 @@ import { SessionsComponent } from './sessions/sessions.component';
     RouterModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    AngularFireModule.initializeApp(environmentDev.firebase),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
   ],
   providers: [MainService],
