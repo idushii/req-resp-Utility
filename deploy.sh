@@ -10,6 +10,6 @@ npm install
 
 npm run build
 
-cp -Rf dist/ ../frontend
+cp -Rf dist/req-resp-Utility  ../frontend
 
 echo "Application deployed!"
