@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { RequestData } from './request-data';
-import { ServerRequest } from './serverRequest';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import {DeviceInfo, ILogger, ResData} from './res_data';
 
 
 @Injectable({
@@ -11,90 +11,116 @@ import { ServerRequest } from './serverRequest';
 })
 export class MainService {
 
-  requestsURL = 'http://localhost:1111/logs/'
+  private dbLoggerDeviceInfoLink = '/logger/info';
+  private dbLoggerSessionsLink = '/logger/sessions';
+  private dbSessionsLink = '/logger/log/';
+  loggerDeviceInfoRef: AngularFireList<ILogger> = null;
+  sessionsRef: AngularFireList<{ [x: number]: number }> = null;
+  requestsRef: AngularFireList<ILogger> = null;
 
-  private items: RequestData[]
-  private newItems: ServerRequest[]
+  items1: ResData[] = [];
+  items1$: BehaviorSubject<ResData[]> = new BehaviorSubject([]);
 
-constructor( private http: HttpClient ) { }
+  sessions: number[] = null;
+  sessions$: BehaviorSubject<number[]> = new BehaviorSubject([]);
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.log(error);
-      window.alert(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    }
+  activeSession: number = null;
+  activeSession$: BehaviorSubject<number | null> = new BehaviorSubject(null);
+
+  activeItem: ResData = null;
+  activeItem$: BehaviorSubject<ResData | null> = new BehaviorSubject(null);
+
+  constructor(private http: HttpClient, private db: AngularFireDatabase) {
+    this.loggerDeviceInfoRef = db.list(this.dbLoggerDeviceInfoLink);
+
+    this.sessions$.subscribe(items => this.sessions = items);
+    this.items1$.subscribe(items => this.items1 = items);
+    this.activeItem$.subscribe(activeitems => this.activeItem = activeitems);
   }
 
-  public getAll(): Observable<ServerRequest[]> {
-    return this.http.get<ServerRequest[]>(this.requestsURL)
-    //.pipe(map(all => all.map((data: ServerRequest) => new RequestData(data))))
-    .pipe(catchError(this.handleError('getAll', [])));
-  }
+  devices$: BehaviorSubject<DeviceInfo[]> = new BehaviorSubject([]);
+  activeDevice$: BehaviorSubject<DeviceInfo | null> = new BehaviorSubject<DeviceInfo | null>(null);
 
-  getData() {
-    this.getAll().subscribe(items => {
-      this.newItems = items
-      console.log(this.newItems)
-    })
-    this.newItems.forEach(newItem => {
-      console.log(newItem)
-      this.items.forEach(item => {
-        if(newItem.id == item.id) {
-          this.updateData(this.getByID(item.id), newItem)
-        } else {
-          this.items.push(new RequestData(newItem))
-        }
-      })
-      console.log(this.items)
+  getDevices(): void {
+    this.loggerDeviceInfoRef.snapshotChanges()
+      .pipe(
+        map((items) => items.map((item) => item.payload.toJSON()) as DeviceInfo[]),
+      ).subscribe(items => {
+      this.devices$.next(items);
     });
-    return this.items
   }
 
-  getByID(id: number) {
-    return this.items.find(item => item.id === id);
+  selectSessions(uuid: string): void {
+    this.devices$.subscribe(items => {
+      this.activeDevice$.next(items.find(item => item.identifier === uuid));
+    });
+
+    this.dbSessionsLink = `/logger/sessions/${uuid}/`;
+    this.sessionsRef = this.db.list(this.dbSessionsLink);
+    this.sessionsRef.snapshotChanges()
+      .pipe(
+        map((items) => items.map((item) => item.payload.toJSON())),
+      )
+      .subscribe((items: number[]) => {
+        this.sessions$.next(items);
+      });
   }
 
-  createData( _data: ServerRequest) {
-    const newItem = {
-      id: _data.id,
-      RequestURL: _data.url,
-      Code_pending:  _data.code,
-      Status_pending: _data.status,
-      Method_pending: _data.method,
-      Headers_pending: _data.headers,
-      Headers_response_pending: _data.headers_response,
-      Payload_pending: _data.payload,
-      Response_pending: _data.response,
-      Duration_pending: _data.duration,
-      Action_pending: _data.action,
+  selectActiveSession(uuid: string, sessionId: number): void {
+    this.activeSession = sessionId;
+    this.selectDevice(uuid, sessionId);
+  }
+
+  selectDevice(uuid: string, sessionId?: number): void {
+    this.devices$.subscribe(items => {
+      this.activeDevice$.next(items.find(item => item.identifier === uuid));
+    });
+
+    if (sessionId) {
+      this.dbSessionsLink = `/logger/log/${uuid}/session/${sessionId}/log`;
+      this.activeSession = sessionId;
+    } else {
+      this.dbSessionsLink = `/logger/log/${uuid}/log/`;
     }
-    console.log(newItem)
-    return newItem;
+    this.requestsRef = this.db.list(this.dbSessionsLink);
+    this.requestsRef.snapshotChanges()
+      .pipe(
+        map((items) => items.map((item) => item.payload.toJSON())),
+        map((items: ResData[]) => {
+
+          const res: { [x: number]: ResData } = {};
+
+          [...items].reverse().forEach(item => {
+            if (res[item.id] === undefined || item.status !== 'pending') {
+              res[item.id] = item;
+            }
+          });
+
+          // tslint:disable-next-line:forin
+          for (const key in res) {
+            const item = res[key];
+            // @ts-ignore
+            res[key].duration = (((new Date(item.responseAt)).getTime() - (new Date(item.createdAt)).getTime()) / 1000).toFixed(1);
+            if (isNaN(res[key].duration)) {
+              res[key].duration = null;
+            }
+          }
+
+          return Object.values(res);
+        }),
+      )
+      .subscribe(items => {
+        this.items1$.next(items);
+      });
   }
 
-  updateData(editItem: RequestData, _data: ServerRequest) {
-    editItem = {
-      id: editItem.id,
-      RequestURL: editItem.RequestURL,
-      Code_pending: editItem.Code_pending,
-      Status_pending: editItem.Status_pending,
-      Method_pending: editItem.Method_pending,
-      Headers_pending: editItem.Headers_pending,
-      Headers_response_pending: editItem.Headers_response_pending,
-      Payload_pending: editItem.Payload_pending,
-      Response_pending: editItem.Response_pending,
-      Duration_pending: editItem.Duration_pending,
-      Action_pending: editItem.Action_pending,
-      Code_done: _data.code,
-      Status_done: _data.status,
-      Headers_done: _data.headers,
-      Headers_response_done: _data.headers_response,
-      Payload_done: _data.payload,
-      Response_done: _data.response,
-      Duration_done: _data.duration,
-      Action_done: _data.action
-    }
-    console.log(editItem)
+  async clearAll(): Promise<void> {
+    // await this.sessionsRef.remove(`${this.activeSession}`);
+    await this.requestsRef.remove();
+  }
+
+  getItem(id: number): ResData {
+    this.activeItem = this.items1.find(item => item.id === id);
+    return this.activeItem;
   }
 }

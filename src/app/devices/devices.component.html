@@ -1,0 +1,16 @@
+<table class="list">
+  <thead>
+  <tr>
+    <th>identifier</th>
+    <th>product</th>
+    <th>deviceName</th>
+    <th>deviceVersion</th>
+  </tr>
+  </thead>
+  <tr *ngFor="let item of (mainService.devices$ | async)" (click)="goTo(item)">
+    <td> {{item.identifier}} </td>
+    <td> {{item.product}} </td>
+    <td> {{item.deviceName}} </td>
+    <td> {{item.deviceVersion}} </td>
+  </tr>
+</table>

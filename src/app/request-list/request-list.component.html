@@ -1,0 +1,42 @@
+<table>
+  <tr>
+    <td>
+      <table class="info">
+        <tr *ngFor="let prop of mainService.activeDevice$ | async | keys">
+          <th>{{prop.key}}</th>
+          <td>{{prop.value}}</td>
+        </tr>
+      </table>
+    </td>
+    <td style="vertical-align: top">
+      <div style="padding: 1rem 0;">Отслеживать активную сессию <input type="checkbox" [checked]="navigateToActiveSession" (click)="changeNavigateToActiveSession()"></div>
+      <div style="padding: 1rem 0;">All Sessions</div>
+      <div>
+        <span
+          class="tag"
+          *ngFor="let prop of mainService.sessions$ | async | keys"
+          (click)="goTo(prop.value)"
+        > {{prop.value}} </span>
+      </div>
+
+    </td>
+  </tr>
+</table>
+<br>
+<button (click)="mainService.clearAll()">ClearAll</button>
+<br>
+<br>
+<table class="list">
+  <tr>
+    <th>ID</th>
+    <th>method / url</th>
+    <th>duration</th>
+    <th>status</th>
+  </tr>
+  <tr *ngFor="let item of (mainService.items1$ | async)" (click)="select(item)">
+    <td>{{item.id}}</td>
+    <td>{{item.method}} {{item.url}}</td>
+    <td>{{item.duration}}</td>
+    <td>{{item.status}}</td>
+  </tr>
+</table>

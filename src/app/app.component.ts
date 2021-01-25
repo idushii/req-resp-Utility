@@ -1,28 +1,20 @@
-import { Component } from '@angular/core';
-import { MainService } from './main.service';
-import { RequestData } from './request-data';
+import {Component, OnInit} from '@angular/core';
+import {MainService} from './main.service';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'req-resp-Utility';
 
-  item: RequestData
-  items: RequestData[]
-
-  constructor( private Service: MainService ) { }
-
-  ngOnInit() {
-    this.items = this.Service.getData()
-    if(this.items.length > 10) {
-      this.items.slice(this.items.length-10, this.items.length)
-    }
+  constructor(public mainService: MainService, private route: ActivatedRoute) {
   }
 
-  getitem(id: number) {
-    return { id: id }
+  ngOnInit(): void {
+    this.mainService.getDevices();
   }
+
 }

@@ -1,12 +1,1 @@
-<div class="page">
-  <div class="list">
-    <table>
-      <tr ng-repeat="item in items">
-        <a (click)="getitem(item.id)">{{item.Action_pending}} {{item.Status_pending}} {{item.Code_pending}} {{item.RequestURL}}</a>
-      </tr>
-    </table>
-  </div>
-  <div class="content">
-    <app-request-data></app-request-data>
-  </div>
-</div>
+<router-outlet></router-outlet>

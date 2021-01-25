@@ -1,0 +1,70 @@
+[
+  {
+    "name": "111",
+    "type": "bloc",
+    "actions": [
+      {
+        "name": "dddd",
+        "events": [
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          }
+        ]
+      },
+      {
+        "name": "dddd",
+        "events": [
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "111",
+    "type": "bloc",
+    "actions": [
+      {
+        "name": "dddd",
+        "events": [
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          }
+        ]
+      },
+      {
+        "name": "dddd",
+        "events": [
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          },
+          {
+            "name": "111"
+          }
+        ]
+      }
+    ]
+  }
+]
