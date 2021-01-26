@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   constructor(public mainService: MainService, private route: ActivatedRoute) {
   }
 
+
   ngOnInit(): void {
     this.mainService.getDevices();
   }
